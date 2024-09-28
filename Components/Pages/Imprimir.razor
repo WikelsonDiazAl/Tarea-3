@@ -1,0 +1,78 @@
+@page "/Registro/Imprimir/{Id}"
+@inject IJSRuntime JSx
+@rendermode InteractiveServer
+@inject NavigationManager NavMan
+@using System.Text.Json
+@layout PrintLayout
+
+<h3>Reporte de accidente</h3>
+
+<p>__________________________________________________________________________________________________________________</p>
+
+<div>
+    Fecha: @Reporte.Fecha
+</div>
+
+<div>
+    Descripción: @Reporte.Descripcion
+</div>
+
+<div>
+    Costo estimado: <Dinero Valor = "@Reporte.CostoEstimado"/>
+</div>
+
+<div>
+    Muertos: @Reporte.Muertos
+</div>
+
+<div>
+    Heridos: @Reporte.Heridos
+</div>
+
+<div>
+    Vehiculos involucrados: @Reporte.VehiculosInvolucrados
+</div>
+
+<p>__________________________________________________________________________________________________________________</p>
+
+@code{
+
+    [Parameter]
+    public string Id {get; set;}
+    Reporte Reporte= new Reporte();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender){
+        if(firstRender)
+        {
+            var RegistrosJson = await JSx.InvokeAsync<string>("localStorage.getItem", "Registros");
+
+            if(RegistrosJson != null)
+            {
+                var Registros = JsonSerializer.Deserialize<List<Reporte>>(RegistrosJson);
+
+                foreach(var Item in Registros){
+                    if(Item.Id == Id){
+                        Reporte = Item;
+                        break;
+                    }
+                }
+
+                if(Reporte.Id == null || Reporte.Id.Length < 5){
+                    await JSx.InvokeVoidAsync("alert", "No se encontro el registro");
+                    NavMan.NavigateTo("Registro");
+                }
+
+                StateHasChanged();
+
+                await JSx.InvokeVoidAsync("window.print");
+
+                await JSx.InvokeVoidAsync("window.close");
+            }
+            else{
+                await JSx.InvokeVoidAsync("alert", "No se encontró el registro");
+                NavMan.NavigateTo("Registro");
+            }
+        }
+    }
+
+}

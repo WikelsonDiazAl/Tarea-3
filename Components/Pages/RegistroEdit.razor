@@ -1,0 +1,90 @@
+@page "/Registro/Nuevo"
+@page "/Registro/Editar/{Id}"
+@inject NavigationManager NavMan
+@inject IJSRuntime JSx
+@rendermode InteractiveServer
+@using System.Text.Json;
+
+<h3>Datos del Registro</h3>
+
+<EditForm Model="@Registro" OnValidSubmit="GuardarReporte">
+    <DataAnnotationsValidator />
+
+    <div>
+        <label for="Fecha" class="form-label">Fecha:</label>
+        <InputDate id="Fecha" @bind-Value="Registro.Fecha" class="form-control" />
+    </div>
+
+    <div>
+        <label for="descripcion" class="form-label">Descripción:</label>
+        <InputTextArea id="descripcion" @bind-Value="Registro.Descripcion" class="form-control" />
+        <ValidationMessage For="@(() => Registro.Descripcion)" />
+    </div>
+
+    <div>
+        <label for="costoEstimado">Costo Estimado:</label>
+        <InputNumber id="costoEstimado" @bind-Value="Registro.CostoEstimado" class="form-control" />
+    </div>
+
+    <div>
+        <label for="muertos">Muertos:</label>
+        <InputNumber id="muertos" @bind-Value="Registro.Muertos" class="form-control" />
+    </div>
+
+    <div>
+        <label for="heridos">Heridos:</label>
+        <InputNumber id="heridos" @bind-Value="Registro.Heridos" class="form-control" />
+    </div>
+
+    <div>
+        <label for="vehiculosInvolucrados">Vehículos Involucrados:</label>
+        <InputNumber id="vehiculosInvolucrados" @bind-Value="Registro.VehiculosInvolucrados" class="form-control" />
+    </div>
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="button" class="btn btn-secondary" @onclick="Regresar">Regresar</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public string? Id {get; set;} = null;
+    private Reporte Registro = new Reporte();
+    List<Reporte> Registros = new List<Reporte>();
+
+    private void GuardarReporte()
+    {
+        if(string.IsNullOrEmpty(Registro.Id)){
+             Registros.Add(Registro);
+             Registro.Id = Guid.NewGuid().ToString();
+
+        }else{
+            var index = Registros.FindIndex(x => x.Id == Registro.Id);
+            Registros[index] = Registro;
+        }
+        JSx.InvokeVoidAsync("localStorage.setItem", "Registros", JsonSerializer.Serialize(Registros));
+        NavMan.NavigateTo("Registro");
+    }
+
+    private void Regresar()
+    {
+        NavMan.NavigateTo("Registro");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender){
+        if(firstRender)
+        {
+            var RegistrosJson = await JSx.InvokeAsync<string>("localStorage.getItem", "Registros");
+            if(RegistrosJson != null)
+            {
+                Registros = JsonSerializer.Deserialize<List<Reporte>>(RegistrosJson);
+
+                if(Id != null){
+                    Registro = Registros.FirstOrDefault(r => r.Id == Id)?? new Reporte();
+                }
+                StateHasChanged();
+            }
+        }
+    }
+}

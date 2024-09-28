@@ -1,0 +1,101 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+}
+
+.content{
+    padding: 20px;
+}
+
+.navbar {
+    background-color: #343a40;
+    padding: 1rem;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-item {
+    margin-left: 1rem;
+}
+
+.nav-link {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    text-transform: capitalize;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-link:hover {
+    transform: scale(1.05); 
+    text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.5); 
+}
+
+main {
+    background-color: #ffffff; 
+    color: #343a40; 
+    padding: 2rem;
+    border-radius: 8px;
+    margin: 2rem auto;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+}
+
+main::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 0.3rem;
+    background-color: #ffc107;
+    margin-bottom: 1.5rem;
+}
+
+main h1, main h2, main h3 {
+    color: #343a40;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+main p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #6c757d;
+}
+
+main .btn {
+    background-color: #343a40;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+main .btn:hover {
+    background-color: #ffc107;
+    color: #343a40;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-toggler {
+        background-color: #495057;
+        color: white;
+        border: none;
+    }
+
+    .navbar-collapse {
+        background-color: #343a40;
+    }
+
+    main {
+        padding: 1.5rem;
+        margin: 1rem auto;
+    }
+}
+
+.container-fluid {
+    max-width: 100px;
+    margin: auto;
+}

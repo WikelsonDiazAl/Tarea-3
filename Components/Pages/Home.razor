@@ -1,0 +1,118 @@
+﻿@page "/"
+@inject NavigationManager NavMan
+@inject IJSRuntime JSx
+@rendermode InteractiveServer
+@using System.Text.Json;
+
+<PageTitle>Estadisticas</PageTitle>
+
+<div class="dashboard">
+    <h1>Estadísticas</h1>
+
+    <div class="card-container">
+        <div class="card">
+            <h2>Cantidad de Casos Registrados</h2>
+            <p>@Registros.Count</p>
+        </div>
+
+        <div class="card">
+            <h2>Total de Vehículos Involucrados</h2>
+            <p>@Registros.Sum(r => r.VehiculosInvolucrados)</p>
+        </div>
+
+        <div class="card">
+            <h2>Total de Muertos</h2>
+            <p>@Registros.Sum(r => r.Muertos)</p>
+        </div>
+
+        <div class="card">
+            <h2>Total de Heridos</h2>
+            <p>@Registros.Sum(r => r.Heridos)</p>
+        </div>
+
+        <div class="card">
+            <h2>Total de Costos</h2>
+            <p><Dinero Valor="@Registros.Sum(r => r.CostoEstimado)"/></p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .chart-container {
+        display: flex; /* Usar flexbox para alinear las gráficas */
+        justify-content: space-between;
+    }
+
+    #myChart, #myDoughnutChart {
+        width: 300px;  /* Ajusta el ancho aquí */
+        height: 150px; /* Ajusta la altura aquí */
+    }
+</style>
+
+<div class="chart-container">
+    <div>
+        <canvas id="myChart" width="1" height="1"></canvas> <!-- Gráfica de Barras -->
+    </div>
+    <div>
+        <canvas id="myDoughnutChart" width="1" height="1"></canvas> <!-- Gráfica Doughnut -->
+    </div>
+</div>
+
+@code {
+    List<Reporte> Registros = new List<Reporte>();
+
+    private int totalCasos;
+    private int totalMuertos;
+    private int totalHeridos;
+    private int totalVehiculos;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var RegistrosJson = await JSx.InvokeAsync<string>("localStorage.getItem", "Registros");
+
+            if (RegistrosJson != null)
+            {
+                Registros = JsonSerializer.Deserialize<List<Reporte>>(RegistrosJson);
+                UpdateTotals();
+                
+                // Datos para la gráfica de barras
+                var chartData = GetChartData();
+                await JSx.InvokeVoidAsync("Graficar", chartData);
+
+                // Datos para la gráfica doughnut
+                var doughnutData = GetDoughnutData();
+                await JSx.InvokeVoidAsync("GraficarDoughnut", doughnutData);
+                
+                StateHasChanged();
+            }
+        }
+    }
+
+    private void UpdateTotals()
+    {
+        totalCasos = Registros.Count;
+        totalMuertos = Registros.Sum(r => r.Muertos);
+        totalHeridos = Registros.Sum(r => r.Heridos);
+        totalVehiculos = Registros.Sum(r => r.VehiculosInvolucrados);
+    }
+
+    private object GetChartData()
+    {
+        return new
+        {
+            labels = new[] { "Casos Registrados", "Muertos", "Heridos", "Vehículos Involucrados" },
+            data = new[] { totalCasos, totalMuertos, totalHeridos, totalVehiculos }
+        };
+    }
+
+    private object GetDoughnutData()
+    {
+        return new
+        {
+            labels = new[] { "Muertos", "Heridos", "Vehículos Involucrados" },
+            data = new[] { totalMuertos, totalHeridos, totalVehiculos }
+        };
+    }
+}

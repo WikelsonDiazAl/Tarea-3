@@ -1,0 +1,101 @@
+body[b-g9rhtotjjk] {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+}
+
+.content[b-g9rhtotjjk]{
+    padding: 20px;
+}
+
+.navbar[b-g9rhtotjjk] {
+    background-color: #343a40;
+    padding: 1rem;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-item[b-g9rhtotjjk] {
+    margin-left: 1rem;
+}
+
+.nav-link[b-g9rhtotjjk] {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    text-transform: capitalize;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-link:hover[b-g9rhtotjjk] {
+    transform: scale(1.05); 
+    text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.5); 
+}
+
+main[b-g9rhtotjjk] {
+    background-color: #ffffff; 
+    color: #343a40; 
+    padding: 2rem;
+    border-radius: 8px;
+    margin: 2rem auto;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+}
+
+main[b-g9rhtotjjk]::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 0.3rem;
+    background-color: #ffc107;
+    margin-bottom: 1.5rem;
+}
+
+main h1[b-g9rhtotjjk], main h2[b-g9rhtotjjk], main h3[b-g9rhtotjjk] {
+    color: #343a40;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+main p[b-g9rhtotjjk] {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #6c757d;
+}
+
+main .btn[b-g9rhtotjjk] {
+    background-color: #343a40;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+main .btn:hover[b-g9rhtotjjk] {
+    background-color: #ffc107;
+    color: #343a40;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-toggler[b-g9rhtotjjk] {
+        background-color: #495057;
+        color: white;
+        border: none;
+    }
+
+    .navbar-collapse[b-g9rhtotjjk] {
+        background-color: #343a40;
+    }
+
+    main[b-g9rhtotjjk] {
+        padding: 1.5rem;
+        margin: 1rem auto;
+    }
+}
+
+.container-fluid[b-g9rhtotjjk] {
+    max-width: 100px;
+    margin: auto;
+}
